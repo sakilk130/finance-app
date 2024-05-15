@@ -9,8 +9,13 @@ import Image from 'next/image';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { schema } from '../_utils';
+import { usePost } from '@/hooks/use-api';
+import { signUpService } from '@/services';
+import { Loader2 } from 'lucide-react';
 
 const Form = () => {
+  const signUp = usePost(signUpService);
+
   const {
     register,
     handleSubmit,
@@ -21,8 +26,16 @@ const Form = () => {
   });
 
   const onSubmitHandler = (data: any) => {
-    reset();
+    signUp.mutate(data, {
+      onSuccess: () => {
+        reset();
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    });
   };
+
   return (
     <div className="flex justify-between h-screen">
       <div className="flex flex-col justify-center items-center w-1/2">
@@ -72,7 +85,14 @@ const Form = () => {
                   {errors.password.message}
                 </div>
               )}
-              <Button className="mt-5 w-full" type="submit">
+              <Button
+                className="mt-5 w-full"
+                type="submit"
+                disabled={signUp.isPending}
+              >
+                {signUp.isPending && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
                 Sign In
               </Button>
             </div>
