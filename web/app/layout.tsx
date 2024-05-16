@@ -4,6 +4,7 @@ import './globals.css';
 
 import { ReactQueryClientProvider } from '@/providers/react-query-client-provider';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { ReduxProvider } from '@/providers/redux';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,12 +21,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ReactQueryClientProvider>
-          {children}
-          {process.env.NODE_ENV === 'development' && (
-            <ReactQueryDevtools initialIsOpen={false} />
-          )}
-        </ReactQueryClientProvider>
+        <ReduxProvider>
+          <ReactQueryClientProvider>
+            {children}
+            {process.env.NODE_ENV === 'development' && (
+              <ReactQueryDevtools initialIsOpen={false} />
+            )}
+          </ReactQueryClientProvider>
+        </ReduxProvider>
       </body>
     </html>
   );
