@@ -1,3 +1,5 @@
+import { setCookie } from 'nookies';
+
 export const getPersistData = () => {
   const persistData = localStorage.getItem('persist:root');
   const persistDataParsed = persistData ? JSON.parse(persistData) : '';
@@ -8,4 +10,8 @@ export const getPersistData = () => {
 
 export const removePersistData = () => {
   localStorage.removeItem('persist:root');
+  setCookie(null, 'auth.token', '', {
+    maxAge: 0,
+    path: '/',
+  });
 };
