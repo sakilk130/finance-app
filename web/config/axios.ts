@@ -1,6 +1,8 @@
 import axios from 'axios';
 
 import { HTTP_STATUS } from '@/enums/http-status';
+import store from '@/redux/store';
+import { getPersistData, removePersistData } from '@/utils';
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL as string,
@@ -12,11 +14,11 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    // const token = store.getState().auth?.access_token || getPersistData();
+    const token = store.getState().auth?.token || getPersistData();
 
-    // if (token) {
-    //   config.headers['Authorization'] = `Bearer ${token}`;
-    // }
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
     config.headers['Accept-Language'] = 'en-US';
     config.headers['language'] = 'en-US';
     return config;
@@ -29,15 +31,15 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => {
     if (response?.data?.code === HTTP_STATUS.UNAUTHORIZED) {
-      //   removePersistData();
-      window.location.href = '/log-in';
+      removePersistData();
+      window.location.href = '/sign-in';
     }
     return response;
   },
   (error) => {
     if (error.response.status === HTTP_STATUS.UNAUTHORIZED) {
-      //   removePersistData();
-      window.location.href = '/log-in';
+      removePersistData();
+      window.location.href = '/sign-in';
     }
   }
 );

@@ -2,9 +2,12 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 
-import { ReactQueryClientProvider } from '@/providers/react-query-client-provider';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { ReduxProvider } from '@/providers/redux';
+import {
+  ReduxProvider,
+  ReactHotToast,
+  ReactQueryClientProvider,
+} from '@/providers';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,6 +26,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ReduxProvider>
           <ReactQueryClientProvider>
+            <ReactHotToast />
             {children}
             {process.env.NODE_ENV === 'development' && (
               <ReactQueryDevtools initialIsOpen={false} />
