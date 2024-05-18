@@ -23,7 +23,12 @@ export class AuthService {
   async register(registerDto: RegisterDto) {
     try {
       const user = await this.userService.create(registerDto);
-      return user;
+      const token = await this.generateToken(user);
+      delete user.password;
+      delete user.deleted_at;
+      delete user.updated_at;
+      delete user.created_at;
+      return { user, token };
     } catch (error) {
       throw error;
     }
