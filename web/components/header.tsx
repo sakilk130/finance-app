@@ -2,6 +2,7 @@ import React from 'react';
 
 import { HeaderLogo } from './header-logo';
 import { Navigation } from './navigation';
+import { UserMenu } from './user-menu';
 
 const Header = () => {
   return (
@@ -12,6 +13,7 @@ const Header = () => {
             <HeaderLogo />
             <Navigation />
           </div>
+          <UserMenu />
         </div>
       </div>
     </header>
