@@ -3,6 +3,7 @@ import React from 'react';
 import { HeaderLogo } from './header-logo';
 import { Navigation } from './navigation';
 import { UserMenu } from './user-menu';
+import { WelcomeMsg } from './welcome-msg';
 
 const Header = () => {
   return (
@@ -15,6 +16,7 @@ const Header = () => {
           </div>
           <UserMenu />
         </div>
+        <WelcomeMsg />
       </div>
     </header>
   );
