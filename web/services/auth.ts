@@ -5,6 +5,11 @@ import { HTTP_STATUS } from '@/enums/http-status';
 export const signUpService = async <T>(data: T): Promise<any> => {
   try {
     const response = await axiosInstance.post(AUTH.SIGN_UP, data);
+    if (response.data?.status === HTTP_STATUS.OK) {
+      return response?.data;
+    } else {
+      throw response?.data;
+    }
     return response?.data;
   } catch (error) {
     throw error;

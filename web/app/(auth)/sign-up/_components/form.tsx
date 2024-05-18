@@ -5,15 +5,22 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { schema } from '../_utils';
 import { usePost } from '@/hooks/use-api';
 import { signUpService } from '@/services';
-import { Loader2 } from 'lucide-react';
+import { useAppDispatch } from '@/redux/store';
+import { clearUser, setUser } from '@/redux/features/auth-slice';
+import { errorResponseHandler } from '@/utils';
 
 const Form = () => {
+  const navigation = useRouter();
+  const dispatch = useAppDispatch();
   const signUp = usePost(signUpService);
 
   const {
@@ -25,13 +32,22 @@ const Form = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmitHandler = (data: any) => {
-    signUp.mutate(data, {
-      onSuccess: () => {
+  const onSubmitHandler = (formData: any) => {
+    signUp.mutate(formData, {
+      onSuccess: (data) => {
+        dispatch(
+          setUser({
+            user: data?.data?.user,
+            token: data?.data?.token,
+          })
+        );
+        toast.success(data?.message || 'Signed up successfully');
         reset();
+        navigation.push('/');
       },
       onError: (error) => {
-        console.log(error);
+        dispatch(clearUser());
+        errorResponseHandler(error, 'An error occurred while logging in.');
       },
     });
   };
