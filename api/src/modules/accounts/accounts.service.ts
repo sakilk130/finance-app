@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -47,15 +47,72 @@ export class AccountsService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} account`;
+  async findOne(id: number, currentUser: User) {
+    try {
+      const account = await this.accountRepository.findOne({
+        where: {
+          id,
+          user_id: currentUser.id,
+        },
+        select: ['id', 'name', 'user_id', 'plaid_id'],
+      });
+      if (!account) {
+        throw new NotFoundException('Account not found');
+      }
+      return account;
+    } catch (error) {
+      throw error;
+    }
   }
 
-  update(id: number, updateAccountDto: UpdateAccountDto) {
-    return `This action updates a #${id} account`;
+  async update(
+    id: number,
+    updateAccountDto: UpdateAccountDto,
+    currentUser: User,
+  ) {
+    try {
+      const account = await this.accountRepository.findOne({
+        where: {
+          id,
+          user_id: currentUser.id,
+        },
+      });
+      if (!account) {
+        throw new NotFoundException('Account not found');
+      }
+      account.name = updateAccountDto.name;
+      await this.accountRepository.save(account);
+      return {
+        id: account.id,
+        name: account.name,
+        user_id: account.user_id,
+        plaid_id: account.plaid_id,
+      };
+    } catch (error) {
+      throw error;
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} account`;
+  async remove(id: number, currentUser: User) {
+    try {
+      const account = await this.accountRepository.findOne({
+        where: {
+          id,
+          user_id: currentUser.id,
+        },
+      });
+      if (!account) {
+        throw new NotFoundException('Account not found');
+      }
+      await this.accountRepository.remove(account);
+      return {
+        id: account.id,
+        name: account.name,
+        user_id: account.user_id,
+        plaid_id: account.plaid_id,
+      };
+    } catch (error) {
+      throw error;
+    }
   }
 }

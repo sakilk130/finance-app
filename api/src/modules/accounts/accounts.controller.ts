@@ -53,17 +53,40 @@ export class AccountsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.accountsService.findOne(+id);
+  async findOne(@Param('id') id: string, @CurrentUser() currentUser: User) {
+    const account = await this.accountsService.findOne(+id, currentUser);
+    return {
+      status: 200,
+      message: 'Account retrieved successfully',
+      data: account,
+    };
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAccountDto: UpdateAccountDto) {
-    return this.accountsService.update(+id, updateAccountDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateAccountDto: UpdateAccountDto,
+    @CurrentUser() currentUser: User,
+  ) {
+    const account = await this.accountsService.update(
+      +id,
+      updateAccountDto,
+      currentUser,
+    );
+    return {
+      status: 200,
+      message: 'Account updated successfully',
+      data: account,
+    };
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.accountsService.remove(+id);
+  async remove(@Param('id') id: string, @CurrentUser() currentUser: User) {
+    const account = await this.accountsService.remove(+id, currentUser);
+    return {
+      status: 200,
+      message: 'Account deleted successfully',
+      data: account,
+    };
   }
 }
