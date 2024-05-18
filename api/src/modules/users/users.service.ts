@@ -37,7 +37,6 @@ export class UsersService {
       delete user.deleted_at;
       return user;
     } catch (error) {
-      console.log(error);
       throw error;
     }
   }

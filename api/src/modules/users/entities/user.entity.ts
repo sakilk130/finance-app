@@ -1,7 +1,8 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ManyToMany } from 'typeorm';
 
 import { BaseEntity } from 'src/shared/entity/base.entity';
 import { ROLE } from 'src/shared/enums/role.enum';
+import { Account } from 'src/modules/accounts/entities/account.entity';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -34,4 +35,7 @@ export class User extends BaseEntity {
     type: 'enum',
   })
   role: ROLE;
+
+  @ManyToMany(() => Account, (account) => account.user)
+  accounts: Account[];
 }

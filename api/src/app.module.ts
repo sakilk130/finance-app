@@ -7,9 +7,15 @@ import { UsersModule } from './modules/users/users.module';
 import { AllExceptionsFilter } from './shared/interceptors/all-exceptions.filter';
 import { ResponseInterceptor } from './shared/interceptors/response.interceptor';
 import { dataSourceOptions } from 'config/db';
+import { AccountsModule } from './modules/accounts/accounts.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(dataSourceOptions), AuthModule, UsersModule],
+  imports: [
+    TypeOrmModule.forRoot(dataSourceOptions),
+    AuthModule,
+    UsersModule,
+    AccountsModule,
+  ],
   controllers: [],
   providers: [
     {

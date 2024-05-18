@@ -1,4 +1,5 @@
 import {
+  Column,
   CreateDateColumn,
   DeleteDateColumn,
   PrimaryGeneratedColumn,
@@ -17,4 +18,10 @@ export abstract class BaseEntity {
 
   @DeleteDateColumn()
   deleted_at: Date;
+
+  @Column({
+    type: 'bigint',
+    nullable: true,
+  })
+  deleted_by: number;
 }
