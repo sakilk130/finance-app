@@ -8,6 +8,7 @@ import {
   ReactHotToast,
   ReactQueryClientProvider,
 } from '@/providers';
+import { AccountCreateSheet } from '@/components/account-create-sheet';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -26,6 +27,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ReduxProvider>
           <ReactQueryClientProvider>
+            <AccountCreateSheet />
             <ReactHotToast />
             {children}
             {process.env.NODE_ENV === 'development' && (
