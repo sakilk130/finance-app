@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { compare } from 'bcrypt';
@@ -44,16 +44,16 @@ export class AuthService {
       });
 
       if (!user) {
-        throw new Error('Email or password is incorrect');
+        throw new BadRequestException('Email or password is incorrect');
       }
 
       if (!user.is_active) {
-        throw new Error('User is not active. Please contact the admin');
+        throw new BadRequestException('Your account is not active');
       }
 
       const isPasswordMatch = await compare(signInDto.password, user.password);
       if (!isPasswordMatch) {
-        throw new Error('Email or password is incorrect');
+        throw new BadRequestException('Email or password is incorrect');
       }
       const token = await this.generateToken(user);
       delete user.password;
