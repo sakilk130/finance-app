@@ -2,6 +2,7 @@
 import {
   ColumnDef,
   ColumnFiltersState,
+  Row,
   SortingState,
   flexRender,
   getCoreRowModel,
@@ -28,7 +29,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   filterKey: string;
-  onDeleted: (rows: TData[]) => void;
+  onDeleted: (rows: any) => void;
   disabled?: boolean;
 }
 
@@ -82,6 +83,10 @@ export function DataTable<TData, TValue>({
             size="sm"
             disabled={disabled}
             type="button"
+            onClick={() => {
+              onDeleted(table.getFilteredSelectedRowModel().rows);
+              table.resetRowSelection();
+            }}
           >
             <Trash className="mr-2 size-4" />
             Delete {table.getFilteredSelectedRowModel().rows.length} row(s)

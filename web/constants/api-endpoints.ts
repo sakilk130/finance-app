@@ -8,4 +8,5 @@ export const AUTH = {
 export const ACCOUNTS = {
   CREATE: '/accounts',
   GET: '/accounts',
+  BULK_DELETE: '/accounts/delete',
 };

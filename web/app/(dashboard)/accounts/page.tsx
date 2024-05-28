@@ -1,6 +1,7 @@
 'use client';
 
 import { Loader2, Plus } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 import { DataTable } from '@/components/data-table';
 import { Button } from '@/components/ui/button';
@@ -8,21 +9,38 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { openModal } from '@/redux/features/account-create-modal-slice';
 import { useAppDispatch } from '@/redux/store';
 import { columns } from './_components/columns';
-import { useFetch } from '@/hooks/use-api';
-import { getAccountsService } from '@/services/account';
+import { useFetch, usePost } from '@/hooks/use-api';
+import {
+  bulkDeleteAccountsService,
+  getAccountsService,
+} from '@/services/account';
 import { QUERY_KEY } from '@/constants';
+import { errorResponseHandler } from '@/utils';
 
 const AccountsPage = () => {
   const dispatch = useAppDispatch();
+  const bulkDeleteAccounts = usePost(bulkDeleteAccountsService);
 
   const openModalHandler = () => {
     dispatch(openModal());
   };
 
-  const { data, isLoading } = useFetch(
+  const { data, isLoading, refetch } = useFetch(
     [QUERY_KEY.ACCOUNTS],
     getAccountsService
   );
+
+  const handleDelete = async (ids: any) => {
+    bulkDeleteAccounts.mutate(ids, {
+      onSuccess: (data) => {
+        toast.success(data?.message || 'Accounts deleted successfully.');
+        refetch();
+      },
+      onError: (error) => {
+        errorResponseHandler(error, 'An error occurred while logging in.');
+      },
+    });
+  };
 
   if (isLoading)
     return (
@@ -59,8 +77,11 @@ const AccountsPage = () => {
             columns={columns}
             data={data?.data ?? []}
             filterKey="name"
-            onDeleted={() => {}}
-            disabled={false}
+            onDeleted={(row) => {
+              const ids = row.map((r: any) => Number(r.original.id));
+              handleDelete(ids);
+            }}
+            disabled={bulkDeleteAccounts.isPending || isLoading}
           />
         </CardContent>
       </Card>

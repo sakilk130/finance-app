@@ -27,3 +27,20 @@ export const getAccountsService = async (): Promise<any> => {
     throw error;
   }
 };
+
+export const bulkDeleteAccountsService = async (
+  ids: number[]
+): Promise<any> => {
+  try {
+    const response = await axiosInstance.post(ACCOUNTS.BULK_DELETE, {
+      ids,
+    });
+    if (response.data?.status === HTTP_STATUS.OK) {
+      return response?.data;
+    } else {
+      throw response?.data;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
