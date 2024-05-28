@@ -18,6 +18,7 @@ import { User } from '../users/entities/user.entity';
 import { AuthorizeGuard } from 'src/shared/guards/authorize.guard';
 import { ROLE } from 'src/shared/enums/role.enum';
 import { AuthGuard } from 'src/shared/guards/auth.guard';
+import { DeleteAccountDto } from './dto/delete-account.dto';
 
 @Controller('accounts')
 @ApiTags('Accounts')
@@ -87,6 +88,22 @@ export class AccountsController {
       status: 200,
       message: 'Account deleted successfully',
       data: account,
+    };
+  }
+
+  @Post('delete')
+  async bulkRemove(
+    @Body() deleteAccountDto: DeleteAccountDto,
+    @CurrentUser() currentUser: User,
+  ) {
+    const accounts = await this.accountsService.bulkRemove(
+      deleteAccountDto,
+      currentUser,
+    );
+    return {
+      status: 200,
+      message: 'Accounts deleted successfully',
+      data: accounts,
     };
   }
 }

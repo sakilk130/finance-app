@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { Account } from './entities/account.entity';
 import { User } from '../users/entities/user.entity';
+import { DeleteAccountDto } from './dto/delete-account.dto';
 
 @Injectable()
 export class AccountsService {
@@ -108,6 +109,29 @@ export class AccountsService {
         name: account.name,
         plaid_id: account.plaid_id,
       };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async bulkRemove(deleteAccountDto: DeleteAccountDto, currentUser: User) {
+    try {
+      const ids = deleteAccountDto.ids;
+      const accounts = await this.accountRepository.find({
+        where: {
+          id: In(ids),
+          user_id: currentUser.id,
+        },
+      });
+      if (accounts.length === 0) {
+        throw new NotFoundException('Accounts not found');
+      }
+      await this.accountRepository.softRemove(accounts);
+      return accounts.map((account) => ({
+        id: account.id,
+        name: account.name,
+        plaid_id: account.plaid_id,
+      }));
     } catch (error) {
       throw error;
     }
