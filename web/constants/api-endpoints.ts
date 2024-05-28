@@ -7,4 +7,5 @@ export const AUTH = {
 //ACCOUNT
 export const ACCOUNTS = {
   CREATE: '/accounts',
+  GET: '/accounts',
 };
