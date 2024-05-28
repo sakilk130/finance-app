@@ -25,7 +25,6 @@ export class AccountsService {
       return {
         id: account.id,
         name: account.name,
-        user_id: account.user_id,
         plaid_id: account.plaid_id,
       };
     } catch (error) {
@@ -39,7 +38,7 @@ export class AccountsService {
         where: {
           user_id: currentUser.id,
         },
-        select: ['id', 'name', 'user_id', 'plaid_id'],
+        select: ['id', 'name', 'plaid_id'],
       });
       return accounts;
     } catch (error) {
@@ -54,7 +53,7 @@ export class AccountsService {
           id,
           user_id: currentUser.id,
         },
-        select: ['id', 'name', 'user_id', 'plaid_id'],
+        select: ['id', 'name', 'plaid_id'],
       });
       if (!account) {
         throw new NotFoundException('Account not found');
@@ -85,7 +84,6 @@ export class AccountsService {
       return {
         id: account.id,
         name: account.name,
-        user_id: account.user_id,
         plaid_id: account.plaid_id,
       };
     } catch (error) {
@@ -108,7 +106,6 @@ export class AccountsService {
       return {
         id: account.id,
         name: account.name,
-        user_id: account.user_id,
         plaid_id: account.plaid_id,
       };
     } catch (error) {
