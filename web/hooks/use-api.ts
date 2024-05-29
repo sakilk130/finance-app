@@ -6,13 +6,13 @@ import {
   useQuery,
 } from '@tanstack/react-query';
 
-export const useFetch = (
-  key: QueryKey,
-  queryFn: () => Promise<any>,
-  options?: Omit<UseQueryOptions<any>, 'queryFn'>
+export const useFetch = <TData = any, TError = unknown>(
+  queryKey: QueryKey,
+  queryFn: () => Promise<TData>,
+  options?: Omit<UseQueryOptions<TData, TError>, 'queryFn' | 'queryKey'>
 ) => {
-  return useQuery({
-    queryKey: key,
+  return useQuery<TData, TError>({
+    queryKey,
     queryFn,
     ...options,
   });

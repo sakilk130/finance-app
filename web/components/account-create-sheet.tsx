@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { usePost } from '@/hooks/use-api';
 import { closeModal } from '@/redux/features/account-create-modal-slice';
@@ -22,8 +23,10 @@ import {
   SheetHeader,
   SheetTitle,
 } from './ui/sheet';
+import { QUERY_KEY } from '@/constants';
 
 const AccountCreateSheet = () => {
+  const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   const { open } = useAppSelector(
     (state: RootState) => state.accountCreateModal
@@ -48,6 +51,9 @@ const AccountCreateSheet = () => {
         dispatch(closeModal());
         toast.success(data?.message || 'Account created successfully');
         reset();
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEY.ACCOUNTS],
+        });
       },
       onError: (error) => {
         errorResponseHandler(

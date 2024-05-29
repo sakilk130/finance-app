@@ -44,3 +44,42 @@ export const bulkDeleteAccountsService = async (
     throw error;
   }
 };
+
+export const getSingleAccountService = async (id: number): Promise<any> => {
+  try {
+    const response = await axiosInstance.get(ACCOUNTS.SINGLE_GET(id));
+    if (response.data?.status === HTTP_STATUS.OK) {
+      return response?.data;
+    } else {
+      throw response?.data;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateAccountService = async ({ id, data }: any): Promise<any> => {
+  try {
+    const response = await axiosInstance.patch(ACCOUNTS.UPDATE(id), data);
+    if (response.data?.status === HTTP_STATUS.OK) {
+      return response?.data;
+    } else {
+      throw response?.data;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteAccountService = async (id: number): Promise<any> => {
+  try {
+    const response = await axiosInstance.delete(ACCOUNTS.DELETE(id));
+    if (response.data?.status === HTTP_STATUS.OK) {
+      return response?.data;
+    } else {
+      throw response?.data;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
