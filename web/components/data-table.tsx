@@ -24,6 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import DeleteAlert from './delete-alert';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -40,6 +41,7 @@ export function DataTable<TData, TValue>({
   disabled,
   onDeleted,
 }: DataTableProps<TData, TValue>) {
+  const [open, setOpen] = React.useState<boolean>(false);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -84,8 +86,7 @@ export function DataTable<TData, TValue>({
             disabled={disabled}
             type="button"
             onClick={() => {
-              onDeleted(table.getFilteredSelectedRowModel().rows);
-              table.resetRowSelection();
+              setOpen(true);
             }}
           >
             <Trash className="mr-2 size-4" />
@@ -165,6 +166,18 @@ export function DataTable<TData, TValue>({
           Next
         </Button>
       </div>
+      <DeleteAlert
+        open={open}
+        onClose={() => setOpen(false)}
+        onConfirm={() => {
+          onDeleted(table.getFilteredSelectedRowModel().rows);
+          if (!disabled) {
+            setOpen(false);
+            table.resetRowSelection();
+          }
+        }}
+        loading={disabled}
+      />
     </div>
   );
 }
