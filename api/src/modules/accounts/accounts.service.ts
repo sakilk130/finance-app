@@ -103,7 +103,7 @@ export class AccountsService {
       if (!account) {
         throw new NotFoundException('Account not found');
       }
-      await this.accountRepository.remove(account);
+      await this.accountRepository.softRemove(account);
       return {
         id: account.id,
         name: account.name,
