@@ -1,6 +1,6 @@
 'use client';
 
-import { Edit, MoreHorizontal } from 'lucide-react';
+import { Edit, MoreHorizontal, Trash } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { openModal } from '@/redux/features/account-edit-modal-slice';
+import { openDeleteModal } from '@/redux/features/account-delete-modal-slice';
 import { useAppDispatch } from '@/redux/store';
 
 interface ActionsProps {
@@ -22,6 +23,10 @@ const Actions = ({ data }: ActionsProps) => {
 
   const openModalHandler = (data: any) => {
     dispatch(openModal(data));
+  };
+
+  const openDeleteModalHandler = (data: any) => {
+    dispatch(openDeleteModal(data));
   };
 
   return (
@@ -39,6 +44,14 @@ const Actions = ({ data }: ActionsProps) => {
         >
           <Edit className="size-4" />
           <DropdownMenuLabel>Edit</DropdownMenuLabel>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="cursor-pointer"
+          disabled={false}
+          onClick={() => openDeleteModalHandler(data)}
+        >
+          <Trash className="size-4" />
+          <DropdownMenuLabel>Delete</DropdownMenuLabel>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

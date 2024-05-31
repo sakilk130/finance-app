@@ -16,6 +16,7 @@ interface DeleteAlertProps {
   onClose: () => void;
   onConfirm: () => void;
   loading?: boolean;
+  subTitle: string;
 }
 
 const DeleteAlert = ({
@@ -23,16 +24,14 @@ const DeleteAlert = ({
   open,
   onConfirm,
   loading,
+  subTitle,
 }: DeleteAlertProps) => {
   return (
     <AlertDialog open={open}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </AlertDialogDescription>
+          <AlertDialogDescription>{subTitle}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel onClick={onClose} disabled={loading}>

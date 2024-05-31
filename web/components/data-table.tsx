@@ -177,6 +177,8 @@ export function DataTable<TData, TValue>({
           }
         }}
         loading={disabled}
+        subTitle="This action cannot be undone. This will permanently delete your
+        account and remove your data from our servers."
       />
     </div>
   );

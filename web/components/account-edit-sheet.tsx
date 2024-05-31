@@ -1,19 +1,20 @@
 'use client';
 
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useQueryClient } from '@tanstack/react-query';
 import { Loader2, Trash } from 'lucide-react';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import * as yup from 'yup';
-import { useQueryClient } from '@tanstack/react-query';
 
 import { QUERY_KEY } from '@/constants';
-import { useDelete, useFetch, usePut } from '@/hooks/use-api';
+import { usePut } from '@/hooks/use-api';
+import { openDeleteModal } from '@/redux/features/account-delete-modal-slice';
 import { closeModal } from '@/redux/features/account-edit-modal-slice';
 import { RootState } from '@/redux/reducers';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { deleteAccountService, updateAccountService } from '@/services/account';
+import { updateAccountService } from '@/services/account';
 import { errorResponseHandler } from '@/utils';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -34,7 +35,11 @@ const AccountEditSheet = () => {
   );
 
   const updateAccount: any = usePut(updateAccountService);
-  const deleteAccount: any = useDelete(deleteAccountService);
+
+  const onOpenDeleteModal = () => {
+    dispatch(closeModal());
+    dispatch(openDeleteModal(data));
+  };
 
   const schema = yup.object().shape({
     name: yup.string().required('Name is required'),
@@ -73,26 +78,6 @@ const AccountEditSheet = () => {
         },
       }
     );
-  };
-
-  const onDelete = () => {
-    if (!data) return;
-    deleteAccount.mutate(data?.id, {
-      onSuccess: (successData: any) => {
-        toast.success(successData?.message || 'Account delete successfully');
-        queryClient.invalidateQueries({
-          queryKey: [QUERY_KEY.ACCOUNTS],
-        });
-        reset();
-        dispatch(closeModal());
-      },
-      onError: (error: any) => {
-        errorResponseHandler(
-          error,
-          'An error occurred while deleting an account.'
-        );
-      },
-    });
   };
 
   useEffect(() => {
@@ -134,7 +119,7 @@ const AccountEditSheet = () => {
           </div>
           <Button
             type="submit"
-            disabled={updateAccount.isPending || deleteAccount.isPending}
+            disabled={updateAccount.isPending}
             className="mb-4"
           >
             {updateAccount.isPending && (
@@ -144,10 +129,10 @@ const AccountEditSheet = () => {
           </Button>
           <Button
             type="button"
-            disabled={updateAccount.isPending || deleteAccount.isPending}
+            disabled={updateAccount.isPending}
             variant="outline"
             className="text-red-500"
-            onClick={onDelete}
+            onClick={onOpenDeleteModal}
           >
             <Trash className="mr-2 h-4 w-4" />
             Delete Account

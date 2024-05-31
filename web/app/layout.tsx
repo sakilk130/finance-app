@@ -10,6 +10,7 @@ import {
 } from '@/providers';
 import { AccountCreateSheet } from '@/components/account-create-sheet';
 import { AccountEditSheet } from '@/components/account-edit-sheet';
+import { ModalProvider } from '@/providers/modal';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -28,8 +29,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ReduxProvider>
           <ReactQueryClientProvider>
-            <AccountCreateSheet />
-            <AccountEditSheet />
+            <ModalProvider />
             <ReactHotToast />
             {children}
             {process.env.NODE_ENV === 'development' && (
