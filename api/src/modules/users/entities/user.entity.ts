@@ -38,4 +38,7 @@ export class User extends BaseEntity {
 
   @ManyToMany(() => Account, (account) => account.user)
   accounts: Account[];
+
+  @ManyToMany(() => Account, (account) => account.user)
+  categories: Account[];
 }

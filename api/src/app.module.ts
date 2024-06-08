@@ -8,6 +8,7 @@ import { AllExceptionsFilter } from './shared/interceptors/all-exceptions.filter
 import { ResponseInterceptor } from './shared/interceptors/response.interceptor';
 import { dataSourceOptions } from 'config/db';
 import { AccountsModule } from './modules/accounts/accounts.module';
+import { CategoriesModule } from './modules/categories/categories.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { AccountsModule } from './modules/accounts/accounts.module';
     AuthModule,
     UsersModule,
     AccountsModule,
+    CategoriesModule,
   ],
   controllers: [],
   providers: [
