@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { User } from '../users/entities/user.entity';
 import { Category } from './entities/category.entity';
+import { DeleteCategoryDto } from './dto/delete-category.dto';
 
 @Injectable()
 export class CategoriesService {
@@ -100,6 +101,29 @@ export class CategoriesService {
         name: category.name,
         plaid_id: category.plaid_id,
       };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async bulkRemove(deleteCategoryDto: DeleteCategoryDto, currentUser: User) {
+    try {
+      const ids = deleteCategoryDto.ids;
+      const categories = await this.categoryRepository.find({
+        where: {
+          id: In(ids),
+          user_id: currentUser.id,
+        },
+      });
+      if (categories.length === 0) {
+        throw new NotFoundException('Category not found');
+      }
+      await this.categoryRepository.softRemove(categories);
+      return categories.map((category) => ({
+        id: category.id,
+        name: category.name,
+        plaid_id: category.plaid_id,
+      }));
     } catch (error) {
       throw error;
     }

@@ -18,6 +18,7 @@ import { AuthorizeGuard } from 'src/shared/guards/authorize.guard';
 import { ROLE } from 'src/shared/enums/role.enum';
 import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
 import { User } from '../users/entities/user.entity';
+import { DeleteCategoryDto } from './dto/delete-category.dto';
 
 @Controller('categories')
 @ApiTags('Categories')
@@ -90,6 +91,22 @@ export class CategoriesController {
       status: 200,
       message: 'Category deleted successfully',
       data: category,
+    };
+  }
+
+  @Post('delete')
+  async bulkRemove(
+    @Body() deleteCategoryDto: DeleteCategoryDto,
+    @CurrentUser() currentUser: User,
+  ) {
+    const categories = await this.categoriesService.bulkRemove(
+      deleteCategoryDto,
+      currentUser,
+    );
+    return {
+      status: 200,
+      message: 'Categories deleted successfully',
+      data: categories,
     };
   }
 }
