@@ -32,6 +32,7 @@ interface DataTableProps<TData, TValue> {
   filterKey: string;
   onDeleted: (rows: any) => void;
   disabled?: boolean;
+  title?: string;
 }
 
 export function DataTable<TData, TValue>({
@@ -40,6 +41,7 @@ export function DataTable<TData, TValue>({
   filterKey,
   disabled,
   onDeleted,
+  title,
 }: DataTableProps<TData, TValue>) {
   const [open, setOpen] = React.useState<boolean>(false);
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -177,8 +179,8 @@ export function DataTable<TData, TValue>({
           }
         }}
         loading={disabled}
-        subTitle="This action cannot be undone. This will permanently delete your
-        account and remove your data from our servers."
+        subTitle={`This action cannot be undone. This will permanently delete your
+        ${title} and remove your data from our servers.`}
       />
     </div>
   );

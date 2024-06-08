@@ -13,3 +13,13 @@ export const ACCOUNTS = {
   UPDATE: (id: number) => `/accounts/${id}`,
   DELETE: (id: number) => `/accounts/${id}`,
 };
+
+//CATEGORIES
+export const CATEGORIES = {
+  CREATE: '/categories',
+  GET: '/categories',
+  BULK_DELETE: '/categories/delete',
+  SINGLE_GET: (id: number) => `/categories/${id}`,
+  UPDATE: (id: number) => `/categories/${id}`,
+  DELETE: (id: number) => `/categories/${id}`,
+};
