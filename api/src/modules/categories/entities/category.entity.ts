@@ -1,3 +1,4 @@
+import { Transaction } from 'src/modules/transactions/entities/transaction.entity';
 import { User } from 'src/modules/users/entities/user.entity';
 import { BaseEntity } from 'src/shared/entity/base.entity';
 import { Column, Entity, JoinColumn, OneToMany } from 'typeorm';
@@ -27,4 +28,7 @@ export class Category extends BaseEntity {
   @OneToMany(() => User, (user) => user.categories)
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @OneToMany(() => Transaction, (transaction) => transaction.category)
+  transactions: Transaction[];
 }

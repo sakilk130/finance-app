@@ -49,12 +49,41 @@ async function bootstrap() {
     .setDescription('Finance app API description ')
     .setVersion('1.0')
     .addBearerAuth(
-      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
       'JWT',
     )
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api-doc', app, document);
+  const options = {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+    customJs: [
+      `window.onload = function() {
+        const key = 'swagger_auth';
+        const auth = JSON.parse(localStorage.getItem(key) || '{}');
+        const ui = window.ui;
+        
+        if (auth) {
+          ui.preauthorizeBasic(key, auth);
+        }
+
+        ui.initOAuth({
+          clientId: 'your-client-id',
+          clientSecret: 'your-client-secret',
+          realm: 'your-realms',
+          appName: 'Finance App',
+        });
+
+        ui.authActions.preauthorizeApiKey('JWT', auth.bearer);
+      };`,
+    ],
+  };
+  SwaggerModule.setup('api-doc', app, document, options);
 
   await app.listen(port);
 

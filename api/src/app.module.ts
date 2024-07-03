@@ -9,6 +9,7 @@ import { ResponseInterceptor } from './shared/interceptors/response.interceptor'
 import { dataSourceOptions } from 'config/db';
 import { AccountsModule } from './modules/accounts/accounts.module';
 import { CategoriesModule } from './modules/categories/categories.module';
+import { TransactionsModule } from './modules/transactions/transactions.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { CategoriesModule } from './modules/categories/categories.module';
     UsersModule,
     AccountsModule,
     CategoriesModule,
+    TransactionsModule,
   ],
   controllers: [],
   providers: [

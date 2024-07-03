@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, OneToMany } from 'typeorm';
 
 import { User } from 'src/modules/users/entities/user.entity';
 import { BaseEntity } from 'src/shared/entity/base.entity';
+import { Transaction } from 'src/modules/transactions/entities/transaction.entity';
 
 @Entity()
 export class Account extends BaseEntity {
@@ -28,4 +29,7 @@ export class Account extends BaseEntity {
   @OneToMany(() => User, (user) => user.accounts)
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @OneToMany(() => Transaction, (transaction) => transaction.account)
+  transactions: Transaction[];
 }
