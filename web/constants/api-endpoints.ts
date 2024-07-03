@@ -1,4 +1,4 @@
-// auth
+//AUTH
 export const AUTH = {
   SIGN_UP: '/auth/register',
   SIGN_IN: '/auth/sign-in',
@@ -22,4 +22,10 @@ export const CATEGORIES = {
   SINGLE_GET: (id: number) => `/categories/${id}`,
   UPDATE: (id: number) => `/categories/${id}`,
   DELETE: (id: number) => `/categories/${id}`,
+};
+
+//TRANSACTION
+export const TRANSACTIONS = {
+  CREATE: '/transactions',
+  GET: '/transactions',
 };
